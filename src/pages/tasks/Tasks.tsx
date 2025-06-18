@@ -22,6 +22,7 @@ const Tasks = () => {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedTaskId, setSelectedTaskId] = useState<number | undefined>(undefined);
 
     const tableData = useGetTaskTable();
     useEffect(() => {
@@ -43,7 +44,14 @@ const Tasks = () => {
                 <TableContainer component={Paper} sx={{ boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)', borderRadius: '4px' }}>
                     <div className="p-4 shadow-none border-0 bg-white flex flex-row items-center w-full">
                         <h1 className="text-3xl text-gray-800 font-semibold">Tasks</h1>
-                        <Button variant="contained" sx={{ ml: 'auto', bgcolor: 'black', textTransform: 'none' }}>
+                        <Button
+                            variant="contained"
+                            sx={{ ml: 'auto', bgcolor: 'black', textTransform: 'none' }}
+                            onClick={() => {
+                                setSelectedTaskId(undefined);
+                                setIsModalOpen(true);
+                            }}
+                        >
                             Create new task
                         </Button>
                     </div>
@@ -102,7 +110,14 @@ const Tasks = () => {
                                         {dayjs(row.endAt).format('DD-MM-YYYY HH:mm:ss')}
                                     </TableCell>
                                     <TableCell align="right" sx={{ color: '#444' }}>
-                                        <IconButton aria-label="delete" color="primary">
+                                        <IconButton
+                                            aria-label="edit"
+                                            color="primary"
+                                            onClick={() => {
+                                                setSelectedTaskId(row.id);
+                                                setIsModalOpen(true);
+                                            }}
+                                        >
                                             <EditIcon />
                                         </IconButton>
                                         <IconButton aria-label="delete" color="error">
@@ -124,7 +139,7 @@ const Tasks = () => {
                     />
                 </TableContainer>
             </div>
-            {isModalOpen && <AddEditTask />}
+            {isModalOpen && <AddEditTask isOpen={isModalOpen} id={selectedTaskId} onClose={() => setIsModalOpen(false)} />}
         </div>
     );
 };
