@@ -1,24 +1,36 @@
 import { Outlet, useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import { selectIsAuthenticated } from 'store/slices/authSlice';
+import { selectIsAuthenticated, selectUser } from 'store/slices/authSlice';
 import { useSelector } from 'react-redux';
 import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
-
+import { IconButton } from '@mui/material';
+import LogoutIcon from '@mui/icons-material/Logout';
+import { postAuthLogout } from 'store/actions/auth.actions';
+import { dispatch } from 'store/index';
 export function Layout() {
     const location = useLocation();
     const isLoginPage = location.pathname === '/login';
     const isAuthenticated = useSelector(selectIsAuthenticated);
+    const user = useSelector(selectUser);
+
+    const handleLogout = () => {
+        dispatch(postAuthLogout());
+    };
+
     return (
         <div className="min-h-screen flex flex-col">
             {isAuthenticated && (
                 <>
                     <header className="text-black">
-                        <div className="w-full py-2 px-6 flex justify-between items-center pl-[260px]">
+                        <div className="w-full py-2 px-6 flex justify-between items-center pl-[30px]">
                             <Link to="/" className="text-2xl font-bold">
                                 Blaze app
                             </Link>
                             <div className="flex items-center gap-4">
-                                <span className="text-sm">Welcome, Admin</span>
+                                <span className="text-sm">Logged as {user?.username}</span>
+                                <IconButton aria-label="delete" color="info" onClick={handleLogout}>
+                                    <LogoutIcon />
+                                </IconButton>
                             </div>
                         </div>
                     </header>

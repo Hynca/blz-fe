@@ -3,10 +3,12 @@ import { configureStore } from '@reduxjs/toolkit';
 // Import reducers here
 import authReducer from './slices/authSlice';
 import { useDispatch as useAppDispatch, useSelector as useAppSelector, TypedUseSelectorHook } from 'react-redux';
+import { tasksTableSlice } from './slices/tasksTableSlice';
 
 const store = configureStore({
     reducer: {
-        auth: authReducer
+        auth: authReducer,
+        taskTable: tasksTableSlice.reducer
     }
 });
 
