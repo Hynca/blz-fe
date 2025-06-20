@@ -2,6 +2,7 @@ import {
     Button,
     IconButton,
     Paper,
+    Skeleton,
     Table,
     TableBody,
     TableCell,
@@ -12,11 +13,12 @@ import {
 } from '@mui/material';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
-import { getTasksTable, useGetTaskTable } from 'store/actions/tasks.actions';
+import { deleteTask, getTasksTable, useGetTaskTable } from 'store/actions/tasks.actions';
 import { dispatch } from 'store/index';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import EditIcon from '@mui/icons-material/Edit';
 import AddEditTask from './AddEditTask/AddEditTask';
+import { reloadTaskTable } from 'store/slices/tasksTableSlice';
 
 const Tasks = () => {
     const [page, setPage] = useState(0);
@@ -25,9 +27,10 @@ const Tasks = () => {
     const [selectedTaskId, setSelectedTaskId] = useState<number | undefined>(undefined);
 
     const tableData = useGetTaskTable();
+
     useEffect(() => {
         dispatch(getTasksTable({ page: page, size: rowsPerPage, sortBy: 'createdAt', sortOrder: 'DESC' }));
-    }, [page, rowsPerPage]);
+    }, [page, rowsPerPage, tableData.tableReload]);
 
     const handleChangePage = (_event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
         setPage(newPage);
@@ -38,6 +41,16 @@ const Tasks = () => {
         setPage(0);
     };
 
+    const handleDeleteTask = async (id: number) => {
+        await dispatch(deleteTask(id));
+        dispatch(reloadTaskTable());
+    };
+
+    const handleEditTask = (id: number) => {
+        setSelectedTaskId(id);
+        setIsModalOpen(true);
+    };
+
     return (
         <div className="bg-[#FFFFFF66] shadow rounded-lg w-full h-full p-8 flex justify-center">
             <div className="w-full max-w-[1300px] h-auto">
@@ -46,7 +59,7 @@ const Tasks = () => {
                         <h1 className="text-3xl text-gray-800 font-semibold">Tasks</h1>
                         <Button
                             variant="contained"
-                            sx={{ ml: 'auto', bgcolor: 'black', textTransform: 'none' }}
+                            sx={{ ml: 'auto', bgcolor: 'green', textTransform: 'none' }}
                             onClick={() => {
                                 setSelectedTaskId(undefined);
                                 setIsModalOpen(true);
@@ -78,54 +91,55 @@ const Tasks = () => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {tableData.data?.items.map((row, index) => (
-                                <TableRow
-                                    key={row.id}
-                                    sx={{
-                                        '&:last-child td, &:last-child th': { border: 0 },
-                                        backgroundColor: index % 2 === 0 ? 'white' : '#fafafa',
-                                        '&:hover': {
-                                            backgroundColor: '#f4f4f4',
-                                            transition: 'background-color 0.2s'
-                                        },
-                                        height: '48px'
-                                    }}
-                                >
-                                    <TableCell component="th" scope="row" sx={{ color: '#222', fontWeight: 500 }}>
-                                        {row.title}
-                                    </TableCell>
-                                    <TableCell align="right" sx={{ color: '#444' }}>
-                                        {row.description}
-                                    </TableCell>
-                                    <TableCell align="right" sx={{ color: '#444' }}>
-                                        {row.location}
-                                    </TableCell>
-                                    <TableCell align="right" sx={{ color: '#444' }}>
-                                        {dayjs(row.createdAt).format('DD-MM-YYYY HH:mm:ss')}
-                                    </TableCell>
-                                    <TableCell align="right" sx={{ color: '#444' }}>
-                                        {dayjs(row.updatedAt).format('DD-MM-YYYY HH:mm:ss')}
-                                    </TableCell>
-                                    <TableCell align="right" sx={{ color: '#444' }}>
-                                        {dayjs(row.endAt).format('DD-MM-YYYY HH:mm:ss')}
-                                    </TableCell>
-                                    <TableCell align="right" sx={{ color: '#444' }}>
-                                        <IconButton
-                                            aria-label="edit"
-                                            color="primary"
-                                            onClick={() => {
-                                                setSelectedTaskId(row.id);
-                                                setIsModalOpen(true);
-                                            }}
-                                        >
-                                            <EditIcon />
-                                        </IconButton>
-                                        <IconButton aria-label="delete" color="error">
-                                            <DeleteForeverIcon />
-                                        </IconButton>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
+                            {tableData.loading
+                                ? [...Array(rowsPerPage)].map((_, i) => (
+                                      <TableRow key={i}>
+                                          <TableCell colSpan={7} sx={{ p: 0 }} height={53}>
+                                              <Skeleton variant="rectangular" height={15} width="100%" />
+                                          </TableCell>
+                                      </TableRow>
+                                  ))
+                                : tableData.data?.items.map((row, index) => (
+                                      <TableRow
+                                          key={row.id}
+                                          sx={{
+                                              '&:last-child td, &:last-child th': { border: 0 },
+                                              backgroundColor: index % 2 === 0 ? 'white' : '#fafafa',
+                                              '&:hover': {
+                                                  backgroundColor: '#f4f4f4',
+                                                  transition: 'background-color 0.2s'
+                                              },
+                                              height: '48px'
+                                          }}
+                                      >
+                                          <TableCell component="th" scope="row" sx={{ color: '#222', fontWeight: 500 }}>
+                                              {row.title}
+                                          </TableCell>
+                                          <TableCell align="right" sx={{ color: '#444' }}>
+                                              {row.description}
+                                          </TableCell>
+                                          <TableCell align="right" sx={{ color: '#444' }}>
+                                              {row.location}
+                                          </TableCell>
+                                          <TableCell align="right" sx={{ color: '#444' }}>
+                                              {dayjs(row.createdAt).format('DD-MM-YYYY HH:mm:ss')}
+                                          </TableCell>
+                                          <TableCell align="right" sx={{ color: '#444' }}>
+                                              {dayjs(row.updatedAt).format('DD-MM-YYYY HH:mm:ss')}
+                                          </TableCell>
+                                          <TableCell align="right" sx={{ color: '#444' }}>
+                                              {dayjs(row.endAt).format('DD-MM-YYYY HH:mm:ss')}
+                                          </TableCell>
+                                          <TableCell align="right" sx={{ color: '#444' }}>
+                                              <IconButton aria-label="edit" color="primary" onClick={() => handleEditTask(row.id)}>
+                                                  <EditIcon />
+                                              </IconButton>
+                                              <IconButton aria-label="delete" color="error" onClick={() => handleDeleteTask(row.id)}>
+                                                  <DeleteForeverIcon />
+                                              </IconButton>
+                                          </TableCell>
+                                      </TableRow>
+                                  ))}
                         </TableBody>
                     </Table>
                     <TablePagination

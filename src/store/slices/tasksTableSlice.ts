@@ -35,12 +35,14 @@ interface TaskTableState {
     loading: boolean;
     rejected: boolean;
     data?: ITasksResponse;
+    tableReload?: number;
 }
 
 const initialState: TaskTableState = {
     data: undefined,
     rejected: false,
-    loading: false
+    loading: false,
+    tableReload: 0
 };
 export const tasksTableSlice = createSlice({
     name: 'tasksTableSlice',
@@ -48,6 +50,9 @@ export const tasksTableSlice = createSlice({
     reducers: {
         resetTaskTable: () => {
             return initialState;
+        },
+        reloadTaskTable: (state) => {
+            state.tableReload = (state.tableReload || 0) + 1;
         }
     },
     extraReducers: (builder) => {
@@ -68,4 +73,4 @@ export const tasksTableSlice = createSlice({
     }
 });
 
-export const { resetTaskTable } = tasksTableSlice.actions;
+export const { resetTaskTable, reloadTaskTable } = tasksTableSlice.actions;
