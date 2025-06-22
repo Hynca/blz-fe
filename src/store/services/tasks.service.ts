@@ -1,19 +1,5 @@
 import httpClient from 'src/config/httpClient';
-
-export interface ITaskTableQuery {
-    page?: number;
-    size?: number;
-    sortBy?: string;
-    sortOrder?: 'ASC' | 'DESC';
-}
-
-export interface ICreateTask {
-    title: string;
-    description?: string;
-    location?: string;
-    startAt: string;
-    endAt: string;
-}
+import { ICreateTask, ITaskTableQuery } from 'src/types/task-types';
 
 const getTasksTable = (query: ITaskTableQuery) => httpClient.get('/tasks/table', { params: query });
 

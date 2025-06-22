@@ -1,16 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { getTask, getTasksTable } from 'store/actions/tasks.actions';
-
-interface ITask {
-    id: number;
-    title: string;
-    description: string;
-    startAt: string;
-    endAt: string;
-    location: string;
-    createdAt: string;
-    updatedAt: string;
-}
+import { ITask } from 'src/types/task-types';
+import { getTask } from 'store/actions/tasks.actions';
 
 interface TaskState {
     loading: boolean;

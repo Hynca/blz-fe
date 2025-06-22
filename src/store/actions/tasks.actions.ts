@@ -1,7 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { useSelector } from 'react-redux';
-import TaskService, { ICreateTask, ITaskTableQuery } from 'store/services/tasks.service';
+import TaskService from 'store/services/tasks.service';
 import { RootState } from '..';
+import { ICreateTask, ITaskTableQuery } from 'src/types/task-types';
 
 export const getTasksTable = createAsyncThunk('getTasksTable', async (query: ITaskTableQuery) => {
     const response = await TaskService.getTasksTable(query);
