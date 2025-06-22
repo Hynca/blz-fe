@@ -4,19 +4,19 @@ A simple React frontend application using Vite, Redux Toolkit, TypeScript, and T
 
 ## Features
 
-- React 19 with functional components
-- Redux Toolkit for state management
-- TypeScript for type safety
-- TailwindCSS for styling
-- Axios for HTTP requests
-- ESLint for code linting
+-   React 19 with functional components
+-   Redux Toolkit for state management
+-   TypeScript for type safety
+-   TailwindCSS for styling
+-   Axios for HTTP requests
+-   ESLint for code linting
 
 ## Getting Started
 
 ### Prerequisites
 
-- Node.js (v18 or newer recommended)
-- npm
+-   Node.js (v18 or newer recommended)
+-   npm
 
 ### Installation
 
@@ -56,20 +56,13 @@ Preview the production build:
 npm run preview
 ```
 
-## Project Structure
-
-- `src/` - Main source code
-  - `components/` - React components
-  - `store/` - Redux slices, actions, and services
-  - `types/` - TypeScript type definitions
-
 ## Tech Stack
 
-- [React](https://react.dev/)
-- [Redux Toolkit](https://redux-toolkit.js.org/)
-- [Vite](https://vitejs.dev/)
-- [TailwindCSS](https://tailwindcss.com/)
-- [TypeScript](https://www.typescriptlang.org/)
+-   [React](https://react.dev/)
+-   [Redux Toolkit](https://redux-toolkit.js.org/)
+-   [Vite](https://vitejs.dev/)
+-   [TailwindCSS](https://tailwindcss.com/)
+-   [TypeScript](https://www.typescriptlang.org/)
 
 ## License
 
