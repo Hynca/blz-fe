@@ -27,7 +27,7 @@ const AddEditTask = ({ isOpen, id, onClose }: IAddEditTaskProps) => {
         register,
         handleSubmit,
         reset,
-        formState: { errors }
+        formState: { errors, isDirty }
     } = useForm<ITaskForm>({
         defaultValues: {
             title: '',
@@ -152,7 +152,7 @@ const AddEditTask = ({ isOpen, id, onClose }: IAddEditTaskProps) => {
             )}
             <DialogActions>
                 <Button onClick={handleClose}>Cancel</Button>
-                <Button onClick={handleSubmit(onSubmit)} variant="contained" color="primary">
+                <Button onClick={handleSubmit(onSubmit)} variant="contained" color="primary" disabled={!isDirty || taskData.loading}>
                     Save
                 </Button>
             </DialogActions>

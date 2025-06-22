@@ -1,6 +1,6 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { ProtectedRoute } from './components/ProtectedRoute';
-import { Layout } from './components/Layout';
+import { ProtectedRoute } from './components/app-layout/ProtectedRoute';
+import { Layout } from './components/app-layout/Layout';
 import Tasks from './pages/tasks/Tasks';
 import { useSelector } from 'react-redux';
 import { selectIsAuthenticated } from 'store/slices/authSlice';
