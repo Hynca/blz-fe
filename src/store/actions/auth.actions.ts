@@ -20,12 +20,19 @@ export const postAuthLogin = createAsyncThunk('postAuthLogin', async ({ email, p
 
 export const postAuthRegister = createAsyncThunk(
     'postAuthRegister',
-    async ({ username, email, password }: { username: string; email: string; password: string }) => {
-        const response = await AuthService.postAuthRegister({ username, email, password });
-
-        if (response.status < 200 || response.status >= 300) {
-            // errMsg(response);
+    async (data: { username: string; email: string; password: string }, { rejectWithValue }) => {
+        try {
+            const response = await AuthService.postAuthRegister(data);
             return response.data;
+        } catch (err: any) {
+            if (err.response && err.response.data) {
+                return rejectWithValue({
+                    message: err.response.data.message,
+                    status: err.response.status,
+                    errors: err.response.data.errors || []
+                });
+            }
+            return rejectWithValue({ message: err.message, status: 500 });
         }
     }
 );

@@ -9,7 +9,8 @@ import {
     TableContainer,
     TableHead,
     TablePagination,
-    TableRow
+    TableRow,
+    Typography
 } from '@mui/material';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
@@ -52,8 +53,8 @@ const Tasks = () => {
     };
 
     return (
-        <div className="bg-[#FFFFFF66] shadow rounded-lg w-full h-full p-8 flex justify-center">
-            <div className="w-full max-w-[1300px] h-auto">
+        <div className="bg-[#FFFFFF66] shadow rounded-lg w-full p-8 flex justify-center">
+            <div className="w-full max-w-[1300px] h-auto sm:max-w-full">
                 <TableContainer component={Paper} sx={{ boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)', borderRadius: '4px' }}>
                     <div className="p-4 shadow-none border-0 bg-white flex flex-row items-center w-full">
                         <h1 className="text-3xl text-gray-800 font-semibold">Tasks</h1>
@@ -68,80 +69,89 @@ const Tasks = () => {
                             Create new task
                         </Button>
                     </div>
-                    <Table sx={{ minWidth: 650 }} size="small">
-                        <TableHead>
-                            <TableRow sx={{ backgroundColor: '#f8f8f8' }}>
-                                <TableCell sx={{ fontWeight: 600, color: '#333', py: 1.5 }}>Title</TableCell>
-                                <TableCell sx={{ fontWeight: 600, color: '#333', py: 1.5 }} align="right">
-                                    Description
-                                </TableCell>
-                                <TableCell sx={{ fontWeight: 600, color: '#333', py: 1.5 }} align="right">
-                                    Location
-                                </TableCell>
-                                <TableCell sx={{ fontWeight: 600, color: '#333', py: 1.5 }} align="right">
-                                    Created at
-                                </TableCell>
-                                <TableCell sx={{ fontWeight: 600, color: '#333', py: 1.5 }} align="right">
-                                    Updated at
-                                </TableCell>
-                                <TableCell sx={{ fontWeight: 600, color: '#333', py: 1.5 }} align="right">
-                                    End at
-                                </TableCell>
-                                <TableCell sx={{ fontWeight: 600, color: '#333', py: 1.5 }} align="right"></TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {tableData.loading
-                                ? [...Array(rowsPerPage)].map((_, i) => (
-                                      <TableRow key={i}>
-                                          <TableCell colSpan={7} sx={{ p: 0 }} height={53}>
-                                              <Skeleton variant="rectangular" height={15} width="100%" />
-                                          </TableCell>
-                                      </TableRow>
-                                  ))
-                                : tableData.data?.items.map((row, index) => (
-                                      <TableRow
-                                          key={row.id}
-                                          sx={{
-                                              '&:last-child td, &:last-child th': { border: 0 },
-                                              backgroundColor: index % 2 === 0 ? 'white' : '#fafafa',
-                                              '&:hover': {
-                                                  backgroundColor: '#f4f4f4',
-                                                  transition: 'background-color 0.2s'
-                                              },
-                                              height: '48px'
-                                          }}
-                                      >
-                                          <TableCell component="th" scope="row" sx={{ color: '#222', fontWeight: 500 }}>
-                                              {row.title}
-                                          </TableCell>
-                                          <TableCell align="right" sx={{ color: '#444' }}>
-                                              {row.description}
-                                          </TableCell>
-                                          <TableCell align="right" sx={{ color: '#444' }}>
-                                              {row.location}
-                                          </TableCell>
-                                          <TableCell align="right" sx={{ color: '#444' }}>
-                                              {dayjs(row.createdAt).format('DD-MM-YYYY HH:mm:ss')}
-                                          </TableCell>
-                                          <TableCell align="right" sx={{ color: '#444' }}>
-                                              {dayjs(row.updatedAt).format('DD-MM-YYYY HH:mm:ss')}
-                                          </TableCell>
-                                          <TableCell align="right" sx={{ color: '#444' }}>
-                                              {dayjs(row.endAt).format('DD-MM-YYYY HH:mm:ss')}
-                                          </TableCell>
-                                          <TableCell align="right" sx={{ color: '#444' }}>
-                                              <IconButton aria-label="edit" color="primary" onClick={() => handleEditTask(row.id)}>
-                                                  <EditIcon />
-                                              </IconButton>
-                                              <IconButton aria-label="delete" color="error" onClick={() => handleDeleteTask(row.id)}>
-                                                  <DeleteForeverIcon />
-                                              </IconButton>
-                                          </TableCell>
-                                      </TableRow>
-                                  ))}
-                        </TableBody>
-                    </Table>
+                    <div className="w-full overflow-x-auto overflow-y-auto min-w-0" style={{ maxHeight: '60vh' }}>
+                        <Table sx={{ minWidth: 650 }} size="small" className="min-w-[700px]">
+                            <TableHead>
+                                <TableRow sx={{ backgroundColor: '#f8f8f8' }}>
+                                    <TableCell sx={{ fontWeight: 600, color: '#333', py: 1.5 }}>Title</TableCell>
+                                    <TableCell sx={{ fontWeight: 600, color: '#333', py: 1.5 }} align="right">
+                                        Description
+                                    </TableCell>
+                                    <TableCell sx={{ fontWeight: 600, color: '#333', py: 1.5 }} align="right">
+                                        Location
+                                    </TableCell>
+                                    <TableCell sx={{ fontWeight: 600, color: '#333', py: 1.5 }} align="right">
+                                        Created at
+                                    </TableCell>
+                                    <TableCell sx={{ fontWeight: 600, color: '#333', py: 1.5 }} align="right">
+                                        Updated at
+                                    </TableCell>
+                                    <TableCell sx={{ fontWeight: 600, color: '#333', py: 1.5 }} align="right">
+                                        End at
+                                    </TableCell>
+                                    <TableCell sx={{ fontWeight: 600, color: '#333', py: 1.5 }} align="right"></TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {!tableData.loading && tableData.data?.items.length === 0 && (
+                                    <TableCell colSpan={7} sx={{ p: 0 }} height={53}>
+                                        <Typography variant="body2" align="center">
+                                            No tasks, continue with creating one!
+                                        </Typography>
+                                    </TableCell>
+                                )}
+                                {tableData.loading
+                                    ? [...Array(rowsPerPage)].map((_, i) => (
+                                          <TableRow key={i}>
+                                              <TableCell colSpan={7} sx={{ p: 0 }} height={53}>
+                                                  <Skeleton variant="rectangular" height={15} width="100%" />
+                                              </TableCell>
+                                          </TableRow>
+                                      ))
+                                    : tableData.data?.items.map((row, index) => (
+                                          <TableRow
+                                              key={row.id}
+                                              sx={{
+                                                  '&:last-child td, &:last-child th': { border: 0 },
+                                                  backgroundColor: index % 2 === 0 ? 'white' : '#fafafa',
+                                                  '&:hover': {
+                                                      backgroundColor: '#f4f4f4',
+                                                      transition: 'background-color 0.2s'
+                                                  },
+                                                  height: '48px'
+                                              }}
+                                          >
+                                              <TableCell component="th" scope="row" sx={{ color: '#222', fontWeight: 500 }}>
+                                                  {row.title}
+                                              </TableCell>
+                                              <TableCell align="right" sx={{ color: '#444' }}>
+                                                  {row.description}
+                                              </TableCell>
+                                              <TableCell align="right" sx={{ color: '#444' }}>
+                                                  {row.location}
+                                              </TableCell>
+                                              <TableCell align="right" sx={{ color: '#444' }}>
+                                                  {dayjs(row.createdAt).format('DD-MM-YYYY HH:mm:ss')}
+                                              </TableCell>
+                                              <TableCell align="right" sx={{ color: '#444' }}>
+                                                  {dayjs(row.updatedAt).format('DD-MM-YYYY HH:mm:ss')}
+                                              </TableCell>
+                                              <TableCell align="right" sx={{ color: '#444' }}>
+                                                  {dayjs(row.endAt).format('DD-MM-YYYY HH:mm:ss')}
+                                              </TableCell>
+                                              <TableCell align="right" sx={{ color: '#444' }}>
+                                                  <IconButton aria-label="edit" color="primary" onClick={() => handleEditTask(row.id)}>
+                                                      <EditIcon />
+                                                  </IconButton>
+                                                  <IconButton aria-label="delete" color="error" onClick={() => handleDeleteTask(row.id)}>
+                                                      <DeleteForeverIcon />
+                                                  </IconButton>
+                                              </TableCell>
+                                          </TableRow>
+                                      ))}
+                            </TableBody>
+                        </Table>
+                    </div>
                     <TablePagination
                         component="div"
                         count={tableData.data?.pagination.totalItems || 0}

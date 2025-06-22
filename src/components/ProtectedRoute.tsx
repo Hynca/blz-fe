@@ -12,7 +12,6 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
     const isAuthenticated = useSelector(selectIsAuthenticated);
 
     if (!isAuthenticated) {
-        // Redirect to the login page but save the current location they were trying to access
         return <Navigate to="/login" state={{ from: location }} replace />;
     }
 

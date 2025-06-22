@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { Button, TextField, Typography, Alert, CircularProgress, Paper } from '@mui/material';
-import { postAuthLogin } from 'store/actions/auth.actions';
+import { postAuthRegister } from 'store/actions/auth.actions';
 import { dispatch } from 'store/index';
 import { useNavigate } from 'react-router-dom';
 
-const LoginPage = () => {
+const RegisterPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [username, setUsername] = useState('');
     const [error, setError] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const navigate = useNavigate();
@@ -21,30 +22,38 @@ const LoginPage = () => {
         setError('');
     };
 
+    const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setUsername(e.target.value);
+        setError('');
+    };
+
     const handleLogin = async (e?: React.FormEvent) => {
         if (e) {
             e.preventDefault();
         }
 
-        if (!email.trim() || !password.trim()) {
-            setError('Please enter both email and password');
+        if (!email.trim() || !password.trim() || !username.trim()) {
+            setError('Please fill all fields');
             return;
         }
 
         setIsSubmitting(true);
         setError('');
 
-        try {
-            await dispatch(postAuthLogin({ email, password }));
-        } catch (err: any) {
-            if (err.response && err.response.status === 401) {
-                setError(err.response.data.message || 'Invalid email or password');
-            } else {
-                setError('An error occurred during login. Please try again.');
-            }
-        } finally {
+        const response = await dispatch(postAuthRegister({ username, email, password }));
+        console.log(response);
+        if (response.payload?.status > 200 && response.payload?.status <= 300) {
             setIsSubmitting(false);
+            navigate('/login');
         }
+        if (response.payload?.status === 400 && response.payload?.message === 'User already exists with this email') {
+            setError('User already exists with this email');
+        } else if (response.payload?.errors.length > 0) {
+            setError(response.payload?.errors.map((err: any) => err.msg).join(', '));
+        } else {
+            setError('An error occurred during registration. Please try again.');
+        }
+        setIsSubmitting(false);
     };
 
     const textfieldStyles = {
@@ -68,7 +77,7 @@ const LoginPage = () => {
         <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
             <Paper className="bg-white p-8 w-full max-w-md">
                 <Typography variant="h4" className="mb-6 text-center">
-                    Sign in
+                    Sign up
                 </Typography>
 
                 {error && (
@@ -79,6 +88,18 @@ const LoginPage = () => {
 
                 <form onSubmit={handleLogin} className="space-y-4 flex flex-col items-center gap-4 my-3">
                     <TextField
+                        label="Username"
+                        fullWidth
+                        value={username}
+                        onChange={handleUsernameChange}
+                        placeholder="John Doe"
+                        disabled={isSubmitting}
+                        autoFocus
+                        size="small"
+                        sx={textfieldStyles}
+                    />
+
+                    <TextField
                         label="Email"
                         type="email"
                         fullWidth
@@ -86,7 +107,6 @@ const LoginPage = () => {
                         onChange={handleEmailChange}
                         placeholder="youremail@domain.com"
                         disabled={isSubmitting}
-                        autoFocus
                         size="small"
                         sx={textfieldStyles}
                     />
@@ -111,7 +131,7 @@ const LoginPage = () => {
                         disabled={isSubmitting}
                         sx={{ ml: 'auto', bgcolor: 'black', textTransform: 'none', marginTop: '16px' }}
                     >
-                        {isSubmitting ? <CircularProgress size={24} /> : 'Sign In'}
+                        {isSubmitting ? <CircularProgress size={24} /> : 'Sign Up'}
                     </Button>
                 </form>
 
@@ -120,13 +140,13 @@ const LoginPage = () => {
                     className="text-center text-gray-600"
                     sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap', gap: 1 }}
                 >
-                    Don't have an account?{' '}
+                    Already have an account?{' '}
                     <Button
                         variant="text"
                         sx={{ textTransform: 'none', minWidth: 'auto', p: '0 4px', textDecoration: 'underline', color: 'black' }}
-                        onClick={() => navigate('/register')}
+                        onClick={() => navigate('/login')}
                     >
-                        Sign up
+                        Sign in
                     </Button>
                 </Typography>
             </Paper>
@@ -134,4 +154,4 @@ const LoginPage = () => {
     );
 };
 
-export default LoginPage;
+export default RegisterPage;

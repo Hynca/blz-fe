@@ -10,6 +10,8 @@ import { dispatch } from 'store/index';
 export function Layout() {
     const location = useLocation();
     const isLoginPage = location.pathname === '/login';
+    const isRegisterPage = location.pathname === '/register';
+    const isAuthPage = isLoginPage || isRegisterPage;
     const isAuthenticated = useSelector(selectIsAuthenticated);
     const user = useSelector(selectUser);
 
@@ -35,7 +37,7 @@ export function Layout() {
                         </div>
                     </header>
 
-                    <div className="flex flex-grow">
+                    <div className="flex flex-grow min-w-0">
                         <aside className="w-64  text-black p-4">
                             <nav className="flex flex-col space-y-4">
                                 <Link
@@ -49,16 +51,15 @@ export function Layout() {
                             </nav>
                         </aside>
 
-                        <main className="flex-grow mb-2">
+                        <main className="flex-grow mb-2 w-full overflow-x-auto">
                             <Outlet />
                         </main>
                     </div>
                 </>
             )}
 
-            {/* Full width main content for login page or when not authenticated */}
-            {(isLoginPage || !isAuthenticated) && (
-                <main className="flex-grow">
+            {(isAuthPage || !isAuthenticated) && (
+                <main className="w-full overflow-x-auto">
                     <Outlet />
                 </main>
             )}

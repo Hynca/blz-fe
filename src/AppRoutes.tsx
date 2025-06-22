@@ -1,10 +1,11 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { Layout } from './components/Layout';
-import { LoginPage } from './pages/auth/LoginPage';
 import Tasks from './pages/tasks/Tasks';
 import { useSelector } from 'react-redux';
 import { selectIsAuthenticated } from 'store/slices/authSlice';
+import RegisterPage from './pages/auth/RegisterPage';
+import LoginPage from './pages/auth/LoginPage';
 
 const AppRoutes = () => {
     const isAuthenticated = useSelector(selectIsAuthenticated);
@@ -12,6 +13,7 @@ const AppRoutes = () => {
         <Routes>
             <Route path="/" element={<Layout />}>
                 <Route path="login" element={isAuthenticated ? <Navigate to="/" replace /> : <LoginPage />} />
+                <Route path="/register" element={isAuthenticated ? <Navigate to="/" replace /> : <RegisterPage />} />
                 <Route
                     path="/"
                     element={
