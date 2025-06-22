@@ -53,7 +53,7 @@ const Tasks = () => {
     };
 
     return (
-        <div className="bg-[#FFFFFF66] shadow rounded-lg w-full p-8 flex justify-center">
+        <div className="bg-[#FFFFFF66] shadow rounded-lg w-full p-8 flex justify-center h-full">
             <div className="w-full max-w-[1300px] h-auto sm:max-w-full">
                 <TableContainer component={Paper} sx={{ boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)', borderRadius: '4px' }}>
                     <div className="p-4 shadow-none border-0 bg-white flex flex-row items-center w-full">
@@ -94,11 +94,13 @@ const Tasks = () => {
                             </TableHead>
                             <TableBody>
                                 {!tableData.loading && tableData.data?.items.length === 0 && (
-                                    <TableCell colSpan={7} sx={{ p: 0 }} height={53}>
-                                        <Typography variant="body2" align="center">
-                                            No tasks, continue with creating one!
-                                        </Typography>
-                                    </TableCell>
+                                    <TableRow>
+                                        <TableCell colSpan={7} sx={{ p: 0 }} height={53}>
+                                            <Typography variant="body2" align="center">
+                                                No tasks, continue with creating one!
+                                            </Typography>
+                                        </TableCell>
+                                    </TableRow>
                                 )}
                                 {tableData.loading
                                     ? [...Array(rowsPerPage)].map((_, i) => (

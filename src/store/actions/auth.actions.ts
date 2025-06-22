@@ -5,15 +5,14 @@ import { dispatch } from '..';
 
 export const postAuthLogin = createAsyncThunk('postAuthLogin', async ({ email, password }: { email: string; password: string }) => {
     const response = await AuthService.postAuthLogin({ email, password });
-
     if (response.status < 200 || response.status >= 300) {
         // errMsg(response);
         return response.data;
     }
     dispatch(
         login({
-            username: response.data.username,
-            email: response.data.email
+            username: response.data.user.username,
+            email: response.data.user.email
         })
     );
 });
@@ -23,6 +22,12 @@ export const postAuthRegister = createAsyncThunk(
     async (data: { username: string; email: string; password: string }, { rejectWithValue }) => {
         try {
             const response = await AuthService.postAuthRegister(data);
+            dispatch(
+                login({
+                    username: response.data.user.username,
+                    email: response.data.user.email
+                })
+            );
             return response.data;
         } catch (err: any) {
             if (err.response && err.response.data) {

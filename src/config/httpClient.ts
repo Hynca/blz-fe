@@ -88,9 +88,7 @@ httpClient.interceptors.response.use(
 
                 try {
                     // Call refresh token endpoint using direct client to avoid interceptors
-                    console.log('Attempting to refresh token');
                     await refreshClient.post('/auth/refresh');
-                    console.log('Token refresh completed successfully');
 
                     // Process any requests that were queued during the refresh
                     processQueue();

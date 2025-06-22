@@ -41,14 +41,13 @@ const RegisterPage = () => {
         setError('');
 
         const response = await dispatch(postAuthRegister({ username, email, password }));
-        console.log(response);
+
         if (response.payload?.status > 200 && response.payload?.status <= 300) {
             setIsSubmitting(false);
-            navigate('/login');
         }
         if (response.payload?.status === 400 && response.payload?.message === 'User already exists with this email') {
             setError('User already exists with this email');
-        } else if (response.payload?.errors.length > 0) {
+        } else if (response.payload?.errors?.length > 0) {
             setError(response.payload?.errors.map((err: any) => err.msg).join(', '));
         } else {
             setError('An error occurred during registration. Please try again.');
