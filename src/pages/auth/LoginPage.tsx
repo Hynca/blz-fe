@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { Button, TextField, Typography, Alert, CircularProgress, Paper } from '@mui/material';
+import { Button, Typography, Alert, CircularProgress, Paper } from '@mui/material';
 import { postAuthLogin } from 'store/actions/auth.actions';
 import { dispatch } from 'store/index';
 import { useNavigate } from 'react-router-dom';
+import CustomInput from 'components/inputs/CustomInput';
 
 const LoginPage = () => {
     const [email, setEmail] = useState('');
@@ -47,23 +48,6 @@ const LoginPage = () => {
         }
     };
 
-    const textfieldStyles = {
-        '& .MuiOutlinedInput-root': {
-            '& fieldset': {
-                borderColor: '#bbbbbb'
-            },
-            '&:hover fieldset': {
-                borderColor: '#888888'
-            },
-            '&.Mui-focused fieldset': {
-                borderColor: 'black'
-            }
-        },
-        '& .MuiInputLabel-root.Mui-focused': {
-            color: 'black'
-        }
-    };
-
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
             <Paper className="bg-white p-8 w-full max-w-md">
@@ -78,29 +62,27 @@ const LoginPage = () => {
                 )}
 
                 <form onSubmit={handleLogin} className="space-y-4 flex flex-col items-center gap-4 my-3">
-                    <TextField
+                    <CustomInput
                         label="Email"
                         type="email"
-                        fullWidth
                         value={email}
                         onChange={handleEmailChange}
                         placeholder="youremail@domain.com"
                         disabled={isSubmitting}
                         autoFocus
                         size="small"
-                        sx={textfieldStyles}
+                        autoComplete="username"
                     />
 
-                    <TextField
+                    <CustomInput
                         label="Password"
                         type="password"
-                        fullWidth
                         value={password}
                         onChange={handlePasswordChange}
                         placeholder="******"
                         disabled={isSubmitting}
                         size="small"
-                        sx={textfieldStyles}
+                        autoComplete="current-password"
                     />
 
                     <Button

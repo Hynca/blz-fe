@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
-import { Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button, Box, CircularProgress } from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Box, CircularProgress } from '@mui/material';
 import { dispatch } from 'store/index';
 import { getTask, postNewTask, putEditTask, useGetTask } from 'store/actions/tasks.actions';
 import { useForm } from 'react-hook-form';
 import { resetTask } from 'store/slices/taskSlice';
 import { reloadTaskTable } from 'store/slices/tasksTableSlice';
+import CustomInput from 'components/inputs/CustomInput';
 
 interface IAddEditTaskProps {
     isOpen: boolean;
@@ -81,72 +82,37 @@ const AddEditTask = ({ isOpen, id, onClose }: IAddEditTaskProps) => {
                 </div>
             ) : (
                 <DialogContent>
-                    <Box component="form" sx={{ pt: 2 }} noValidate>
-                        <TextField
+                    <Box component="form" sx={{ pt: 2, display: 'flex', flexDirection: 'column', gap: 2 }} noValidate>
+                        <CustomInput
                             autoFocus
-                            margin="dense"
-                            id="title"
                             label="Title"
                             type="text"
-                            fullWidth
-                            variant="outlined"
                             error={!!errors.title}
-                            helperText={errors.title?.message}
-                            InputLabelProps={{ shrink: true }}
                             {...register('title', { required: 'Title is required' })}
                         />
-                        <TextField
-                            margin="dense"
-                            id="description"
+                        <CustomInput
                             label="Description"
                             type="text"
-                            fullWidth
+                            error={!!errors.description}
                             multiline
                             rows={4}
-                            variant="outlined"
-                            InputLabelProps={{ shrink: true }}
-                            error={!!errors.description}
-                            helperText={errors.description?.message}
                             {...register('description')}
                         />
-                        <TextField
-                            margin="dense"
-                            id="location"
-                            label="Location"
-                            type="text"
-                            fullWidth
-                            variant="outlined"
-                            InputLabelProps={{ shrink: true }}
-                            error={!!errors.location}
-                            helperText={errors.location?.message}
-                            {...register('location')}
-                        />
-                        <div className="flex flex-row items-center gap-2">
-                            <TextField
-                                margin="dense"
-                                id="startAt"
+                        <CustomInput label="Location" type="text" error={!!errors.location} {...register('location')} />
+                        <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
+                            <CustomInput
                                 label="Start Date"
                                 type="date"
-                                fullWidth
-                                variant="outlined"
-                                InputLabelProps={{ shrink: true }}
                                 error={!!errors.startAt}
-                                helperText={errors.startAt?.message}
                                 {...register('startAt', { required: 'Start date is required' })}
                             />
-                            <TextField
-                                margin="dense"
-                                id="endAt"
+                            <CustomInput
                                 label="End Date"
                                 type="date"
-                                fullWidth
-                                variant="outlined"
-                                InputLabelProps={{ shrink: true }}
                                 error={!!errors.endAt}
-                                helperText={errors.endAt?.message}
                                 {...register('endAt', { required: 'End date is required' })}
                             />
-                        </div>
+                        </Box>
                     </Box>
                 </DialogContent>
             )}

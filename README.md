@@ -1,76 +1,76 @@
-# React + TypeScript + Vite
+# FE-BLZ
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A simple React frontend application using Vite, Redux Toolkit, TypeScript, and TailwindCSS.
 
-## Environment Setup
+## Features
 
-The application uses environment variables to configure different environments. The following files are used:
+- React 19 with functional components
+- Redux Toolkit for state management
+- TypeScript for type safety
+- TailwindCSS for styling
+- Axios for HTTP requests
+- ESLint for code linting
 
-- `.env` - Default environment variables (development)
-- `.env.production` - Production environment variables
+## Getting Started
 
-Available environment variables:
+### Prerequisites
 
-| Variable     | Description                   | Example                   |
-| ------------ | ----------------------------- | ------------------------- |
-| VITE_API_URL | Base API URL for all requests | http://localhost:3000/api |
+- Node.js (v18 or newer recommended)
+- npm
 
-To use a custom environment:
+### Installation
 
-1. Create a `.env.local` file in the project root (this will not be committed to git)
-2. Override any variables you want to change
-
-Environment variables are accessed through `src/config/env.ts` to provide type safety.
-
-## Vite Plugins
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default tseslint.config({
-    extends: [
-        // Remove ...tseslint.configs.recommended and replace with this
-        ...tseslint.configs.recommendedTypeChecked,
-        // Alternatively, use this for stricter rules
-        ...tseslint.configs.strictTypeChecked,
-        // Optionally, add this for stylistic rules
-        ...tseslint.configs.stylisticTypeChecked
-    ],
-    languageOptions: {
-        // other options...
-        parserOptions: {
-            project: ['./tsconfig.node.json', './tsconfig.app.json'],
-            tsconfigRootDir: import.meta.dirname
-        }
-    }
-});
+```bash
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Development
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x';
-import reactDom from 'eslint-plugin-react-dom';
+Start the development server:
 
-export default tseslint.config({
-    plugins: {
-        // Add the react-x and react-dom plugins
-        'react-x': reactX,
-        'react-dom': reactDom
-    },
-    rules: {
-        // other rules...
-        // Enable its recommended typescript rules
-        ...reactX.configs['recommended-typescript'].rules,
-        ...reactDom.configs.recommended.rules
-    }
-});
+```bash
+npm run dev
 ```
+
+### Build
+
+Build the app for production:
+
+```bash
+npm run build
+```
+
+### Lint
+
+Check code for linting errors:
+
+```bash
+npm run lint
+```
+
+### Preview
+
+Preview the production build:
+
+```bash
+npm run preview
+```
+
+## Project Structure
+
+- `src/` - Main source code
+  - `components/` - React components
+  - `store/` - Redux slices, actions, and services
+  - `types/` - TypeScript type definitions
+
+## Tech Stack
+
+- [React](https://react.dev/)
+- [Redux Toolkit](https://redux-toolkit.js.org/)
+- [Vite](https://vitejs.dev/)
+- [TailwindCSS](https://tailwindcss.com/)
+- [TypeScript](https://www.typescriptlang.org/)
+
+## License
+
+MIT
