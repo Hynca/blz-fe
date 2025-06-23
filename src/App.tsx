@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 import { dispatch, store } from './store';
 import { useEffect, useState } from 'react';
 import { getMe } from 'store/actions/auth.actions';
+import CircularProgress from '@mui/material/CircularProgress';
 
 function App() {
     const [isLoaded, setIsLoaded] = useState(false);
@@ -19,7 +20,17 @@ function App() {
                     <AppRoutes />
                 </Router>
             ) : (
-                <>Loading ...</>
+                <div
+                    style={{
+                        minHeight: '100vh',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        background: 'white'
+                    }}
+                >
+                    <CircularProgress size={64} thickness={5} />
+                </div>
             )}
         </Provider>
     );

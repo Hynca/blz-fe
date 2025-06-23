@@ -6,19 +6,12 @@ import { useForm } from 'react-hook-form';
 import { resetTask } from 'store/slices/taskSlice';
 import { reloadTaskTable } from 'store/slices/tasksTableSlice';
 import CustomInput from 'components/inputs/CustomInput';
+import { ITaskForm } from 'src/types/task-types';
 
 interface IAddEditTaskProps {
     isOpen: boolean;
     id: number | undefined;
     onClose?: () => void;
-}
-
-interface ITaskForm {
-    title: string;
-    description: string;
-    location: string;
-    startAt: string;
-    endAt: string;
 }
 
 const AddEditTask = ({ isOpen, id, onClose }: IAddEditTaskProps) => {
@@ -88,28 +81,43 @@ const AddEditTask = ({ isOpen, id, onClose }: IAddEditTaskProps) => {
                             label="Title"
                             type="text"
                             error={!!errors.title}
-                            {...register('title', { required: 'Title is required' })}
+                            helperText={errors.title ? errors.title.message : ''}
+                            {...register('title', {
+                                required: 'Title is required',
+                                maxLength: { value: 40, message: 'Max 40 characters' }
+                            })}
                         />
                         <CustomInput
                             label="Description"
                             type="text"
                             error={!!errors.description}
+                            helperText={errors.description ? errors.description.message : ''}
                             multiline
-                            rows={4}
+                            rows={3}
                             {...register('description')}
                         />
-                        <CustomInput label="Location" type="text" error={!!errors.location} {...register('location')} />
+                        <CustomInput
+                            label="Location"
+                            type="text"
+                            error={!!errors.location}
+                            helperText={errors.location ? errors.location.message : ''}
+                            {...register('location', {
+                                maxLength: { value: 40, message: 'Max 40 characters' }
+                            })}
+                        />
                         <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
                             <CustomInput
                                 label="Start Date"
                                 type="date"
                                 error={!!errors.startAt}
+                                helperText={errors.startAt ? errors.startAt.message : ''}
                                 {...register('startAt', { required: 'Start date is required' })}
                             />
                             <CustomInput
                                 label="End Date"
                                 type="date"
                                 error={!!errors.endAt}
+                                helperText={errors.endAt ? errors.endAt.message : ''}
                                 {...register('endAt', { required: 'End date is required' })}
                             />
                         </Box>

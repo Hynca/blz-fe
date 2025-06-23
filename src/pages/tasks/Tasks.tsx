@@ -20,11 +20,13 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import EditIcon from '@mui/icons-material/Edit';
 import AddEditTask from './AddEditTask/AddEditTask';
 import { reloadTaskTable } from 'store/slices/tasksTableSlice';
+import TaskDetail from './TaskDetail/TaskDetail';
 
 const Tasks = () => {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
     const [selectedTaskId, setSelectedTaskId] = useState<number | undefined>(undefined);
 
     const tableData = useGetTaskTable();
@@ -49,7 +51,12 @@ const Tasks = () => {
 
     const handleEditTask = (id: number) => {
         setSelectedTaskId(id);
-        setIsModalOpen(true);
+        setIsEditModalOpen(true);
+    };
+
+    const handleOpenDetailModal = (id: number) => {
+        setSelectedTaskId(id);
+        setIsDetailModalOpen(true);
     };
 
     return (
@@ -63,7 +70,7 @@ const Tasks = () => {
                             sx={{ ml: 'auto', bgcolor: 'green', textTransform: 'none' }}
                             onClick={() => {
                                 setSelectedTaskId(undefined);
-                                setIsModalOpen(true);
+                                setIsEditModalOpen(true);
                             }}
                         >
                             Create new task
@@ -124,10 +131,21 @@ const Tasks = () => {
                                               }}
                                           >
                                               <TableCell component="th" scope="row" sx={{ color: '#222', fontWeight: 500 }}>
-                                                  {row.title}
+                                                  <Typography
+                                                      variant="body1"
+                                                      color="info"
+                                                      onClick={() => handleOpenDetailModal(row.id)}
+                                                      sx={{ cursor: 'pointer', textDecoration: 'underline' }}
+                                                  >
+                                                      {row.title}
+                                                  </Typography>
                                               </TableCell>
                                               <TableCell align="right" sx={{ color: '#444' }}>
-                                                  {row.description}
+                                                  {row.description && row.description.length > 40 ? (
+                                                      <span title={row.description}>{row.description.slice(0, 40) + '...'}</span>
+                                                  ) : (
+                                                      row.description
+                                                  )}
                                               </TableCell>
                                               <TableCell align="right" sx={{ color: '#444' }}>
                                                   {row.location}
@@ -165,7 +183,10 @@ const Tasks = () => {
                     />
                 </TableContainer>
             </div>
-            {isModalOpen && <AddEditTask isOpen={isModalOpen} id={selectedTaskId} onClose={() => setIsModalOpen(false)} />}
+            {isEditModalOpen && <AddEditTask isOpen={isEditModalOpen} id={selectedTaskId} onClose={() => setIsEditModalOpen(false)} />}
+            {isDetailModalOpen && (
+                <TaskDetail isOpen={isDetailModalOpen} id={selectedTaskId ?? -1} onClose={() => setIsDetailModalOpen(false)} />
+            )}
         </div>
     );
 };

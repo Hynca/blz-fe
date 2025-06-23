@@ -4,6 +4,7 @@ import { selectIsAuthenticated, selectUser } from 'store/slices/authSlice';
 import { useSelector } from 'react-redux';
 import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
 import { IconButton } from '@mui/material';
+import Tooltip from '@mui/material/Tooltip';
 import LogoutIcon from '@mui/icons-material/Logout';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
@@ -38,9 +39,11 @@ export function Layout() {
                                 <button className="sm:hidden p-2" onClick={() => setMobileMenuOpen((v) => !v)} aria-label="Open menu">
                                     {mobileMenuOpen ? <CloseIcon /> : <MenuIcon />}
                                 </button>
-                                <IconButton aria-label="logout" color="info" onClick={handleLogout}>
-                                    <LogoutIcon />
-                                </IconButton>
+                                <Tooltip title="Logout">
+                                    <IconButton aria-label="logout" color="default" onClick={handleLogout}>
+                                        <LogoutIcon />
+                                    </IconButton>
+                                </Tooltip>
                             </div>
                         </div>
                         {mobileMenuOpen && (

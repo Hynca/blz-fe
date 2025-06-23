@@ -36,13 +36,12 @@ const LoginPage = () => {
         setError('');
 
         try {
-            await dispatch(postAuthLogin({ email, password }));
-        } catch (err: any) {
-            if (err.response && err.response.status === 401) {
-                setError(err.response.data.message || 'Invalid email or password');
-            } else {
-                setError('An error occurred during login. Please try again.');
+            const response = await dispatch(postAuthLogin({ email, password }));
+            if (response.payload?.status === 401) {
+                setError(response.payload?.message);
             }
+        } catch (err: any) {
+            setError('An error occurred during login. Please try again.');
         } finally {
             setIsSubmitting(false);
         }
